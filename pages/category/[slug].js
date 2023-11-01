@@ -1,11 +1,20 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'
 import moment from 'moment/moment'
 import { getCategories, getCategoriesPosts } from '@/services'
+import Loader from '@/components/Loader';
+
 
 const Category = ({ categories }) => {
+  let router = useRouter();
+
+  if(router.isFallback) {
+   return <Loader />
+  }
+
   return (
  <div className="ccontainer mx-auto px-10 mb-8">
     {categories.map((category) => <div key={category.id} className='bg-white shadow-lg rounded-lg p-0 lg:p-8 pb-12 mb-8 text-gray-950'>
@@ -74,6 +83,6 @@ export const getStaticProps = async ({params}) => {
       
       return {
           paths: result.categories.map((slug) => ({params: slug})),
-          fallback: false,
+          fallback: true,
       }
     }
